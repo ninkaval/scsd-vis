@@ -357,7 +357,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 				int prefID			= tmpParticipant.getPrefID();
 				long time			= tmpParticipant.getTstamp();
 				
-				System.out.println("MainPApplet::readDB():  Participant: " + "cID=" + cardID + ":" + "devID=" + devID + ":" + "cat=" + catID + ":" + "pref="+prefID + ":" + time);
+				//System.out.println("MainPApplet::readDB():  Participant: " + "cID=" + cardID + ":" + "devID=" + devID + ":" + "cat=" + catID + ":" + "pref="+prefID + ":" + time);
 				
 				float feedbackVal = 0f; 
 				switch(prefID) {
