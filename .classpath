@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="scsd/TestApp.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="Java/core.jar"/>
+	<classpathentry kind="lib" path="lib/controlP5/controlP5.jar"/>
+	<classpathentry kind="lib" path="lib/mysql/mysql-connector-java-5.1.22-bin.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/audioutils.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/colorutils.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/datautils.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/joal.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/simutils.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/toxiclibs_p5.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/toxiclibscore.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/verletphysics.jar"/>
+	<classpathentry kind="lib" path="lib/toxilibs0020/volumeutils.jar"/>
+	<classpathentry kind="lib" path="lib/vecmath/vecmath.jar"/>
+	<classpathentry kind="lib" path="lib/serial/serial.jar"/>
+	<classpathentry kind="lib" path="Java/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="Java/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="Java/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="Java/jogl-all.jar"/>
+	<classpathentry kind="lib" path="lib/serial/jssc.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SCSD_Device/lib/serial/macosx"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
