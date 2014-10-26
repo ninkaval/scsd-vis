@@ -8,3 +8,6 @@ public interface DashboardListener {
 
 	void specialCategorySelected(int _val); // heart btn
 }
+
+
+

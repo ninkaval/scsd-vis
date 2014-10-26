@@ -3,6 +3,8 @@ package facade;
 import processing.core.PApplet;
 import scsd.MainPApplet;
 import util.Assets;
+
+// controlP5 does not work with processing 2.0 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.ControlWindow;
