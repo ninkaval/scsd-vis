@@ -14,10 +14,6 @@ import com.DashboardListener;
 import com.DatabaseParticipant;
 import com.VisDatabaseCom;
 
-import controlP5.ControlEvent;
-import facade.Dimensions;
-import facade.Geometry;
-import facade.Points;
 
 
 
