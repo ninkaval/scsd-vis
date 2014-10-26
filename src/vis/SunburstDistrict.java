@@ -113,8 +113,7 @@ public class SunburstDistrict {
 
 		// Sum up energy consumption
 		sumConsumption += _newConsumption;
-		System.out.println("_newExp = " + _newExp + " _newConsumption = "
-				+ _newConsumption + " numUsers = " + numUsers);
+		//System.out.println("_newExp = " + _newExp + " _newConsumption = "			+ _newConsumption + " numUsers = " + numUsers);
 
 		// printme();
 	}

@@ -75,8 +75,9 @@ public class VisDatabaseCom extends DatabaseCom {
 							dbLastTimestamp = tmpStamp; 
 							System.out.println("dbLastTimestamp : " + dbLastTimestamp + " category : " + catID);							
 						}
-						System.out.println("tmpStamp : " + resultCounter + " " + tmpStamp + " category : " + catID);
-		                dbParticipants.add(new DatabaseParticipant(cardID, devID, catID, prefID, tmpStamp));
+						//System.out.println("tmpStamp : " + resultCounter + " " + tmpStamp + " category : " + catID);
+		                
+						dbParticipants.add(new DatabaseParticipant(cardID, devID, catID, prefID, tmpStamp));
 		                resultCounter++; 
 		            }
 					dbNumNewParticipants = resultCounter; 	

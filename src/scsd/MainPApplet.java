@@ -339,29 +339,11 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	public void mouseReleased(){
 		move = false;
 	}
-	 
-	/** Checks if there are new participants in the DB and if yes, adds them to the visualiuzation
-	 * TODO: make everything pass through the communication thread class */
-	public void _readDB(){
-		if(g_newResults) {
-		     System.out.println();
-			 for (int j=3; j <= g_num_new_participants+2; j++){
-			    temp = split(g_lines[j], ':');
-				mainUserData.addEnergyUser(Integer.parseInt(temp[0]),
-			    							temp[1],
-			    							Float.parseFloat(temp[2]),
-			    							Float.parseFloat(temp[3]), 
-			    							Float.parseFloat(temp[4]));
-			 }
-			 g_newResults 			= false;
-		     g_resultsPublished 	= true;
-		}	
-	}
 	
 	/** Query DB for new participants */
 	public void readDB(){
 		if(dbCom.areNewResults()) { 
-			println("MainPApplet::readDB(): NEW PARTICIPANTS IN DB!!!");
+			//println("MainPApplet::readDB(): NEW PARTICIPANTS IN DB!!!");
 		    int num = dbCom.getParticipants().size(); 
 		    DatabaseParticipant tmpParticipant; 
 		    
@@ -374,14 +356,16 @@ public class MainPApplet extends PApplet implements DashboardListener{
 				int catID			= tmpParticipant.getCatID();
 				int prefID			= tmpParticipant.getPrefID();
 				long time			= tmpParticipant.getTstamp();
-				System.out.println("MainPApplet::readDB():  Participant: " + cardID + ":" + devID + ":" + catID + ":" + prefID + ":" + time);
+				
+				System.out.println("MainPApplet::readDB():  Participant: " + "cID=" + cardID + ":" + "devID=" + devID + ":" + "cat=" + catID + ":" + "pref="+prefID + ":" + time);
+				
 				float feedbackVal = 0f; 
 				switch(prefID) {
 					case 0: feedbackVal = 30; break; 
 					case 1: feedbackVal = 60; break; 
 					case 2: feedbackVal = 90; break; 
 				}
-				mainUserData.addEnergyUser(devID,cardID,feedbackVal, 0, 0);
+				mainUserData.addEnergyUser(catID,cardID,feedbackVal, 0, 0);
 		      }
 		    }
 		    dbCom.setNewResults(false);
