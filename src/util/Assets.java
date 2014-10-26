@@ -124,7 +124,7 @@ public class Assets {
 	public static int projectInfoShiftY 	= 0; 
 		
 	
-	public static String districtConfig = "/Users/nina/Documents/Eclipse/SCSD_Device/data/districts.csv";
+	public static String districtConfig = "/Users/nina/Documents/Eclipse/scsd-vis/data/districts.csv";
 	
 	public static boolean drawGUI		= true;
 
@@ -166,16 +166,16 @@ public class Assets {
 //	    fontTitles           = P.loadFont("AndaleMono-14.vlw");
 		    
 	    
-	    iconMobile           = p.loadShape("/Users/nina/Documents/Eclipse/SCSD_Device/data/mobile.svg");
+	    iconMobile           = p.loadShape("/Users/nina/Documents/Eclipse/scsd-vis/data/mobile.svg");
 
 	    
 	    //iconCategory0		= p.loadImage("icons/0-air.png");
-		iconCategory1		= p.loadImage("/Users/nina/Documents/Eclipse/SCSD_Device/data/icons/1-environment.png");
-		iconCategory2		= p.loadImage("/Users/nina/Documents/Eclipse/SCSD_Device/data/icons/2-mobility.png");
-		iconCategory3		= p.loadImage("/Users/nina/Documents/Eclipse/SCSD_Device/data/icons/3-safety.png");
-		iconCategory4		= p.loadImage("/Users/nina/Documents/Eclipse/SCSD_Device/data/icons/4-publicspace.png");
-		iconCategory5		= p.loadImage("/Users/nina/Documents/Eclipse/SCSD_Device/data//Users/nina/Documents/Eclipse/SCSD_Device/data/icons/5-housing.png");
-		iconCategory6		= p.loadImage("/Users/nina/Documents/Eclipse/SCSD_Device/data/icons/6-quality-all.png");
+		iconCategory1		= p.loadImage("/Users/nina/Documents/Eclipse/scsd-vis/data/icons/1-environment.png");
+		iconCategory2		= p.loadImage("/Users/nina/Documents/Eclipse/scsd-vis/data/icons/2-mobility.png");
+		iconCategory3		= p.loadImage("/Users/nina/Documents/Eclipse/scsd-vis/data/icons/3-safety.png");
+		iconCategory4		= p.loadImage("/Users/nina/Documents/Eclipse/scsd-vis/data/icons/4-publicspace.png");
+		iconCategory5		= p.loadImage("/Users/nina/Documents/Eclipse/scsd-vis/data//Users/nina/Documents/Eclipse/scsd-vis/data/icons/5-housing.png");
+		iconCategory6		= p.loadImage("/Users/nina/Documents/Eclipse/scsd-vis/data/icons/6-quality-all.png");
 		
 		iconsCategory 		= new ArrayList<PImage>();
 		//iconsCategory.add(iconCategory0);

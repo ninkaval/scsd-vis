@@ -47,19 +47,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	EventScheduler scheduler;
 	
 	
-	//////////////////////////////////////////////////////////////////////
-	// Facade Mask Objects 
-	//////////////////////////////////////////////////////////////////////
-	Dimensions 	facadeDims;
-	Points 		facadePts;
-	Geometry 	facadeGeom; 
-	PGraphics   pgTextureUnfold1 		= null; 
-	PGraphics   pgTextureUnfold2 		= null; 
-	PGraphics   pgFacadeUnfold			= null;
-	PGraphics   pgTextureUnfoldRotated  = null;
-	float 		pgScaleFact 			= 1.5f; 
-	PImage 		testImage 				= null; 
-
+	
 	
 	//-------------------------------------------------------------------
 	boolean comOn 				= true    ;
@@ -166,24 +154,9 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		dbCom					= new VisDatabaseCom(); 
 		dbCom.setDashboardListener(this);
 		
-		//--------------------------------------------------------------------
-		facadeDims 				= Dimensions.getInstance();
-		facadeGeom  			= new Geometry(facadeDims.getPoints());
-
-		testImage 				= loadImage("tex3.jpg");
-		if (testImage !=null)   pgScaleFact	= testImage.width / facadeDims.totalWidth;
-	
-		pgScaleFact = 1.0f;
-		
-		pgTextureUnfold1		= createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
-		pgTextureUnfold2 		= createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
-		pgFacadeUnfold 			= createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
-		pgTextureUnfoldRotated  = createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
-		
 		pgVisFullscreen 		= createGraphics(width, height, P3D);
-	    pgVisSmall				= createGraphics((int)facadeDims.totalWidth, (int)facadeDims.totalHeight, P3D);
-		pgVisLegend				= createGraphics(width, height, JAVA2D);
-
+	
+		
 		//--------------------------------------------------------------------
 //     	if (comOn && !mainCom.running){ 
 //     		println();
@@ -206,7 +179,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 
 	@Override
 	public void draw(){
-		frame.setLocation(0, 0);
+		//frame.setLocation(0, 0);
 
 		x 	= Assets.maskOffsetX; 
 		y	= Assets.maskOffsetY;
@@ -215,124 +188,9 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		dy2 = Assets.maskHeight + y2;
 
 		background(Assets.appletBGColor);
-			
-		//--------------------------------draw GUIs
-//		if (drawGUI)
-//			facadeDims.cp5.show();
-//		else facadeDims.cp5.hide(); 
-
 		
-		float ratioVisTexture = facadeDims.totalHeight/pgVisFullscreen.height;
-		
-		if (!mainDrawVisFullscreen){
-			//--------------------------------RENDER / DISPLAY SUNBURST MAPPED 
-
-			//--------------------------------render vis to smaller texture 
-			renderVisSunburst(pgVisSmall, ratioVisTexture);			
-			//--------------------------------display smaller texture to screen 
-			pushMatrix();
-				imageMode(CORNER);
-				translate(x, y2);
-				image(pgVisSmall, 0, 0);
-				
-				if (mainDrawAuxLines){
-					noFill();//-------------------draw a debug rectangle on top 
-					rectMode(CORNER);
-					stroke(Assets.ColorCYAN);
-					rect(0, 0, pgVisSmall.width, pgVisSmall.height);
-				}
-			popMatrix();
-			
-			
-			//-------------------------------RENDER / DISPLAY FACADE UNFOLDINGS / MASKS 
-			 
-			//-------------------------------render texture-to-be-mapped cut along facade front-side borders  
-			facadeGeom.drawTextureUnfold(pgTextureUnfold2, null, pgScaleFact, false, Assets.ColorCYAN, -1); 
-			pushMatrix();
-				translate(x+dx, y2);
-				image(pgTextureUnfold2, 0, 0);
-				
-				if (mainDrawAuxLines){
-					noFill();//-------------------draw a debug rectangle on top 
-					rectMode(CORNER);
-					stroke(Assets.ColorCYAN);
-					rect(0, 0, pgTextureUnfold2.width, pgTextureUnfold2.height);
-				}
-			popMatrix();
-			
-			//-------------------------------render texture-to-be-mapped unfolding rotated around the lateral-side borders 
-			facadeGeom.drawTextureUnfold(pgTextureUnfoldRotated, pgVisSmall, pgScaleFact, true, Assets.colorWhite, -1); 
-			pushMatrix();
-				translate(x, y);
-				imageMode(CORNER);
-				image(pgTextureUnfoldRotated, 0, 0);
-				
-				if (mainDrawAuxLines){
-					noFill();//-------------------draw a debug rectangle on top 
-					rectMode(CORNER);
-					stroke(Assets.maskStrokeColor1);
-					rect(0, 0, pgTextureUnfoldRotated.width, pgTextureUnfoldRotated.height);
-				}
-			popMatrix(); 
-					
-			//------------------------------render the facade geometry unfolding mask 
-			facadeGeom.drawFacadeUnfold(pgFacadeUnfold, pgScaleFact, Assets.colorWhite, -1); 
-			pushMatrix();
-				translate(x + dx, y);
-				imageMode(CORNER);
-				image(pgFacadeUnfold, 0, 0);
-				
-				if (mainDrawAuxLines){
-					noFill();//-------------------draw a debug rectangle on top 
-					rectMode(CORNER);
-					stroke(Assets.colorWhite);
-					rect(0, 0, pgFacadeUnfold.width, pgFacadeUnfold.height);
-				}
-			popMatrix(); 
-					
-			//------------------------------------draw category icon at the center of the mapped texture 
-			if (mainDrawCategory && dbCom.getActiveCategoryID() > 0){
-				int iconID = dbCom.getActiveCategoryID()-1;//categories start with 1
-				PImage iconImg = Assets.iconsCategory.get(iconID);
-				if (iconImg!=null){
-					pushMatrix();
-						translate(x + pgTextureUnfoldRotated.width/2, y + pgTextureUnfoldRotated.height/2);
-						imageMode(CENTER);
-						image(iconImg, 0, 0);
-					popMatrix(); 
-				}
-			}
-			//------------------------------draw mask 
-			if (mainDrawFacadeMask) {
-				drawFacadeMask();
-			}
-			
-			if (mainDrawAuxLines) {
-				drawAuxLines(); 
-			}
-			//-----------------------------END RENDER / DISPLAY 	
-		} 
-		
-		else {
-			renderVisSunburst(pgVisFullscreen, 1.0f);
-			image(pgVisFullscreen, 0, 0);
-		}
-				
-		//--------------------------------draw participation legend ontop of everything 
-		//if (mainDrawLegend) {
-			renderVisLegend(pgVisLegend, 0.8f);
-			pushMatrix();
-				translate(x, y+dy2);
-				image(pgVisLegend, 0, 0);
-				
-				if (mainDrawAuxLines){
-					noFill();//-------------------draw a debug rectangle on top 
-					rectMode(CORNER);
-					stroke(Assets.colorWhite);
-					rect(0, 0, pgVisLegend.width, pgVisLegend.height);
-				}
-			popMatrix();
-		//}
+		renderVisSunburst(pgVisFullscreen, 1.0f);
+		image(pgVisFullscreen, 0, 0);
 		
 		scheduler.update();
 		readDB();
@@ -343,6 +201,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	
 	
 	public void renderVisLegend(PGraphics pg, float scaleFactor){
+		
 		
 		pg.beginDraw();
 		pg.hint(ENABLE_NATIVE_FONTS);
@@ -559,10 +418,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		}
 	}
 	
-	/** Catch controlP5 controlEvents here (callback seems not accessible outside PApplet) */
-	public void controlEvent(ControlEvent theEvent) {
-		facadeDims.controlEvent(theEvent);
-	}
+	
 	
 	/** Draws the mask corresponding the facade vis mapping */
 	public void drawFacadeMask(){
