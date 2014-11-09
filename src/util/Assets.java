@@ -150,9 +150,9 @@ public class Assets {
 //	    visFontProjectTitle  = p.loadFont("ArialNarrow-40.vlw"); 		// BARCELONETA CIVIC CENTER     
 //	    
 	    
-	    visFontLegend 	= p.createFont("Georgia", 14);
-	    visFontLastUser = p.createFont("Georgia", 40);	//1
-	    visFontCenter 	= p.createFont("Georgia", 40);		//1
+	    visFontLegend 	= p.createFont("MyriadPro-Bold", 14);
+	    visFontLastUser = p.createFont("MyriadPro-Bold", 40);	//1
+	    visFontCenter 	= p.createFont("MyriadPro-Bold", 40);		//1
 	    
 	    visFontTitles       = p.createFont("Georgia", 14);	
 	    visFontDistricts     = p.createFont("Georgia", 14);	

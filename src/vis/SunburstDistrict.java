@@ -16,8 +16,8 @@ public class SunburstDistrict {
 	String code;
 	int col;
 	
-	boolean drawLabels 	= false; 
-	boolean drawArcDeco = false; 
+	boolean drawLabels 	= true; 
+	boolean drawArcDeco = true; 
 	
 	float sumExpenses; // gas + electo from DB in EURO
 	float sumConsumption; // energy from DB in HKWH
@@ -154,6 +154,7 @@ public class SunburstDistrict {
 			// -----------------------------------------------
 			avgExpRad = _avgArcRadius;
 			arcPos.set(_avgArcRadius * 0.5f, _beginAngle).toCartesian();
+			pg.color(255);
 			pg.arc(0, 0, _avgArcRadius * 1.f, _avgArcRadius * 1.f, _beginAngle,_endAngle);
 
 			//------------------------------------------------draw the ending decoration of the arc 
@@ -164,7 +165,7 @@ public class SunburstDistrict {
             if (drawArcDeco){
 				pg.line(endPos1.x, endPos1.y, endPos1.x + endDir.x * 50, endPos1.y + endDir.y * 50);
 			}
-		pg.popMatrix(); //------------------------------------END DRAW DISTRICT ARC  
+        pg.popMatrix(); //------------------------------------END DRAW DISTRICT ARC  
 
 		if (drawLabels) {
 			pg.pushMatrix();//--------------------------------START DRAWING LABELS 

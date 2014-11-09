@@ -245,6 +245,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	
 	@Override
 	public void keyPressed(){    
+		
 		mainSunburstVisualization.keyPressed(key);
 		mainUserData.keyPressed(key);
 		switch(key){

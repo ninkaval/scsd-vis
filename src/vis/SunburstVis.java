@@ -86,7 +86,7 @@ public class SunburstVis extends GenericVis {
 
 		reset();
 
-		// ------------------------set the city energy piece
+		// ------------------------set the city energy piece (overall energy) 
 		energyCity = new SunburstPiece(Assets.cityId, Assets.labelCurrentCity,
 				Assets.avgCityElectro, Assets.avgCityGas, Assets.avgCityEnergy,
 				2 * PConstants.PI, MainPApplet.mainPhysicsEngine);
