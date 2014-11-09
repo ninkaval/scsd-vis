@@ -226,6 +226,10 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		
 		//pg.hint(ENABLE_NATIVE_FONTS);//-------------------not needed for low-res displays? 
 	    //	pg.smooth();//------------------------------------this slows down extremely 
+		
+		
+		
+		//hi mori github
 	    
 		//--------------------------------------------------FIXME: what is this about? 
 		pg.pushMatrix();
