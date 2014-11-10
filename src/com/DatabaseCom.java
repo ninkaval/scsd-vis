@@ -84,7 +84,7 @@ public class DatabaseCom extends Thread {
 			
 			//System.out.println("DBCommunicator created!");
 		} catch (Exception ex) { 
-			System.out.println("Communication(): " + ex); 
+			System.out.println("DatabaseCom(): " + ex); 
 			ex.printStackTrace(); 
 		} 	
 		
