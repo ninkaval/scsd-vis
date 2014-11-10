@@ -3,7 +3,7 @@ package com;
 import processing.core.PApplet;
 import scsd.MainPApplet;
 
-public class WebCom extends Thread {
+public class WebComRevealit extends Thread {
   public boolean running;    // Is the thread running?  Yes or no?
   boolean available;  // Are there new tweets available?
   
@@ -18,7 +18,7 @@ public class WebCom extends Thread {
   String urlPrefix = "http://" + host + "/get_user_update.php?last=";
   //String urlPrefix = "http://localhost/~jp/revealit/get_user_update.php?last=";
    
-  public WebCom(){ 
+  public WebComRevealit(){ 
   }
   
   public boolean available() {
