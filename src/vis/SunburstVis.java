@@ -148,7 +148,7 @@ public class SunburstVis extends GenericVis {
 		}
 
 		//MainPApplet.mainCenterVis.setContent_USER1(_name, _gas + _electro);
-		MainPApplet.mainCenterVis.setContent_VISITORS();
+		//MainPApplet.mainCenterVis.setContent_VISITORS();
 		
 		// ---------------------first of all: calculate new piece angle
 		numUsers++;

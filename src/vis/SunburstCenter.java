@@ -80,7 +80,6 @@ public class SunburstCenter{
     updateSprings();
   }
   
-   
   //TODO: make animation showing name and than value according to timing 
   //should fade away after some time 
   // "NAME spent VAL" 
@@ -159,8 +158,8 @@ public class SunburstCenter{
     updateSprings(); 
   }
   
-  void setContent(String txt){
-    line2 = "txt";
+  public void setContent(String txt){
+    line2 = txt;
     updateSprings();
   }
   
@@ -196,7 +195,7 @@ public class SunburstCenter{
       pg.textFont(Assets.visFontCenter, PApplet.dist(p1c1.x,p1c1.y,p2c1.x,p2c1.y));
       
       //--------Draw string along circle-----
-      String message = line3; 
+      String message = line2; 
       tmpRad = (0.5f * tmpRad) * 0.6f; // draw a bit inside of circle
       // calc overall arclength of word 
       float wordArcLength = 0;
@@ -250,9 +249,9 @@ public class SunburstCenter{
 //      pg.text(line1, 0f, - 0.2f * bboxh);
 
       // Draw line2 and 3 content (white) 
-      pg.fill(255,255,0);
-      pg.text(line2, 0f, - 0.2f * bboxh + txtHeight);  
-//      pg.text(line3, 0f, - 0.2f * bboxh + 2f * txtHeight);
+//      pg.fill(255,255,0);
+//      pg.text(line2, 0f, - 0.2f * bboxh + txtHeight);  
+////      pg.text(line3, 0f, - 0.2f * bboxh + 2f * txtHeight);
       
       
 

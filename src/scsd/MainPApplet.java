@@ -109,24 +109,23 @@ public class MainPApplet extends PApplet /* implements DashboardListener */{
 	PGraphics pgVisSmall; 
 	PGraphics pgVisLegend;
 	
-	/*
+	///*
 	public void init() {
 		if (frame != null) {
 			frame.removeNotify();// make the frame not displayable
 			frame.setResizable(false);
 			frame.setUndecorated(true);
-			frame.addNotify();
+		     println("MainPApplet::init(): Frame is at "+frame.getLocation());
+		    frame.addNotify();
 		}
 		super.init();
 		
-	}*/
-	
-
-	
+	}//*/
+		
 	@Override
 	public void setup() {
 		//size(1800, 768, PConstants.OPENGL);
-		size(1024, 768, P3D);//FIXME: we use JAVA2D for the shapes (svg) to be rendered OK 
+		size(displayWidth, displayHeight, P3D);//FIXME: we use JAVA2D for the shapes (svg) to be rendered OK 
 		
 		//((PGraphicsOpenGL)g).textureSampling(3);
 	    
@@ -458,6 +457,7 @@ public class MainPApplet extends PApplet /* implements DashboardListener */{
 			dbCom.reset();
 			dbCom.setNewCategory(false);
 			dbCom.setCategoryPublished(true);
+			mainCenterVis.setContent(dbCom.getActiveCategoryString());
 		}
 	}
 	
@@ -470,22 +470,11 @@ public class MainPApplet extends PApplet /* implements DashboardListener */{
 	
 	
 	
-	
-	public void init(){
-        if(frame!=null){
-          frame.removeNotify();//make the frame not displayable
-          frame.setResizable(false);
-          frame.setUndecorated(true);
-          println("MainPApplet::init(): Frame is at "+frame.getLocation());
-          frame.addNotify();
-        }
-      super.init();
-	}
-	
 	public static void main(String args[]) {
 		//PApplet.main(new String[] { "-present", "App" });
-		PApplet.main(new String[]{"scsd.MainPApplet"});
-		//PApplet.main(new String[] { "--present", "scsd.MainPApplet" });
+		//PApplet.main(new String[]{"scsd.MainPApplet"});
+		
+		PApplet.main(new String[] { "--present", "scsd.MainPApplet" });
 
 	}
 

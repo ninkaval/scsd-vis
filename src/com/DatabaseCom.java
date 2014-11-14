@@ -21,6 +21,7 @@ public class DatabaseCom extends Thread {
     String 	  	lastActiveCardID = "";			// controls that users dont swipe too much 
 	int 		activeDeviceID=1; 						// the device which we are currently working with 
 	int 		activeCategoryID=0; 					// the currently active category   
+	String 		activeCategoryString="";
 	
     boolean   	newCategory; 					// is there a new category set in the DB 
     boolean   	categoryPublished; 				// is the new category published (registered with the viz) 
@@ -263,6 +264,7 @@ public class DatabaseCom extends Thread {
        		 System.out.println("DatabaseCom::queryCategory(): new category in DB: " + dbID);
        		 //--------set the new active category for the app
        		 activeCategoryID = dbID; 
+       		 activeCategoryString = rs.getString(2);
        		 ret = true; 
        	 } 
        	 else ret = false; 
@@ -285,6 +287,11 @@ public class DatabaseCom extends Thread {
        }
        return ret;        
 	}
+
+	public String getActiveCategoryString() {
+		return activeCategoryString;
+	}
+
 
 	public int queryDevice() {
 		Statement stmt 	= null;
