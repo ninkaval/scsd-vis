@@ -75,7 +75,7 @@ public class EnergyUserData
   public EnergyUserData(){
 	mapUsers 		= new HashMap<Integer, ArrayList<EnergyUser>>();
     districtInfos 	= new HashMap<Integer, DistrictInfo>();
-    System.out.println("EnergyUsage initialized...");
+    //System.out.println("EnergyUsage initialized...");
     numUsers = 0; 
     numDistricts = 0; 
     
@@ -130,7 +130,7 @@ public class EnergyUserData
   
   public void addEnergyUser(int _id, String _name, float _electro, float _gas, float _energy){
     if (debug)
-      System.out.println("addEnergyUser: (" + _id +","+ _name +","+ _electro +","+ _gas + ","+ _energy +")");
+      //System.out.println("addEnergyUser: (" + _id +","+ _name +","+ _electro +","+ _gas + ","+ _energy +")");
     
     // if this district is already in the hashmap
     if (mapUsers.containsKey(_id)){

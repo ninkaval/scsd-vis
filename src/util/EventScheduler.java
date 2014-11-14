@@ -80,26 +80,26 @@ public class EventScheduler{
     }
     
     
-    if (applet.frameCount % intervalShowDistrictParticipation == 0){
-        MainPApplet.mainCenterVis.setContent_DISTRICTS();
-    }
+//    if (applet.frameCount % intervalShowDistrictParticipation == 0){
+//        MainPApplet.mainCenterVis.setContent_DISTRICTS();
+//    }
     
     if (applet.frameCount % intervalShowVisitorsParticipation == 0){
         MainPApplet.mainCenterVis.setContent_VISITORS();
     }
     
-    if (applet.frameCount % intervalDoInvitation1 == 0){ 
-      float ran = applet.random(1,10);
-      if (ran%2 == 0) MainPApplet.mainCenterVis.setContent_Invitation_1(); 
-      else MainPApplet.mainCenterVis.setContent_Invitation_3(); 
-
-    }
-    
-    if (applet.frameCount % intervalDoInvitation2 == 0){ 
-      float ran = applet.random(1,10);
-      if (ran%2 == 0) MainPApplet.mainCenterVis.setContent_Invitation_2(); 
-      else MainPApplet.mainCenterVis.setContent_Invitation_4(); 
-    }
+//    if (applet.frameCount % intervalDoInvitation1 == 0){ 
+//      float ran = applet.random(1,10);
+//      if (ran%2 == 0) MainPApplet.mainCenterVis.setContent_Invitation_1(); 
+//      else MainPApplet.mainCenterVis.setContent_Invitation_3(); 
+//
+//    }
+//    
+//    if (applet.frameCount % intervalDoInvitation2 == 0){ 
+//      float ran = applet.random(1,10);
+//      if (ran%2 == 0) MainPApplet.mainCenterVis.setContent_Invitation_2(); 
+//      else MainPApplet.mainCenterVis.setContent_Invitation_4(); 
+//    }
     
   }
 

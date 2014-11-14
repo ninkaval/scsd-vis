@@ -86,7 +86,7 @@ public class SunburstVis extends GenericVis {
 
 		reset();
 
-		// ------------------------set the city energy piece (overall energy) 
+		// ------------------------set the city energy piece
 		energyCity = new SunburstPiece(Assets.cityId, Assets.labelCurrentCity,
 				Assets.avgCityElectro, Assets.avgCityGas, Assets.avgCityEnergy,
 				2 * PConstants.PI, MainPApplet.mainPhysicsEngine);
@@ -125,15 +125,17 @@ public class SunburstVis extends GenericVis {
 	void calcAngle() {
 		if (numUsers == 0)
 			angleUser = 0.f;
-		else
-			angleUser = PConstants.PI * 2 / numUsers;
+		else {
+			float angleRange = PConstants.PI * 2f;
+			angleUser = (angleRange - (float)Assets.visPiecesSpace * numUsers)/ numUsers;
+		}
 	}
 
 	@Override
 	void notifyNewUser(int _id, String _name, float _electro, float _gas, float _energy) {
 
 		if (_name.equals("")) {
-			_name = "Tu";
+			_name = "You";
 		}
 
 		if (debug) {
@@ -145,8 +147,9 @@ public class SunburstVis extends GenericVis {
 //															   + ") numUsers = " + numUsers);
 		}
 
-		MainPApplet.mainCenterVis.setContent_USER1(_name, _gas + _electro);
-
+		//MainPApplet.mainCenterVis.setContent_USER1(_name, _gas + _electro);
+		MainPApplet.mainCenterVis.setContent_VISITORS();
+		
 		// ---------------------first of all: calculate new piece angle
 		numUsers++;
 		calcAngle();
@@ -204,10 +207,15 @@ public class SunburstVis extends GenericVis {
 
 
 	public void displaySunburst(PGraphics pg) {
+		
 		if (pg == null) {
-			System.out.println("EnergyCircle::displayCircle PGraphics null!");
+			System.out.println("EnergyCircle::displaySunburst() PGraphics null! return...");
 			return;
 		}
+		
+		pg.pushMatrix();
+		pg.rotate(PConstants.PI / 2 + angleUser*0.5f);
+		
 		try {
 			Iterator<ArrayList<SunburstPiece>> i = visMapPiecesPerDistrict.values()
 					.iterator();
@@ -223,24 +231,25 @@ public class SunburstVis extends GenericVis {
 				SunburstDistrict tmpDistrict = (SunburstDistrict) i2.next();
 				int disColor = tmpDistrict.getCol();
 
-				// -------------------------------------------------------------------------loop
-				// users in district
+				// loop users in district
 				for (int p = 0; p < energyPieces.size(); p++) {
-					SunburstPiece tmpEnergyPiece = (SunburstPiece) energyPieces
-							.get(p);
+					SunburstPiece tmpEnergyPiece = (SunburstPiece)energyPieces.get(p);
 
 					if (!colorYellow)
 						tmpEnergyPiece.setColorNormal(disColor);
 					else {
 						// epa.setCol1(color(255,255,0));
 					}
-
-					tmpEnergyPiece.display(pg, lastAng, lastAng + angleUser);
-					tmpEnergyPiece.updateSpring(bBounceAll);
-					bBounceAll = false;
-
+					
+					//-----paint the single bursts only if we are NOT in the HEART MODE 
+					if ((MainPApplet.getInstance()).dbCom != null && (MainPApplet.getInstance()).dbCom.getHeart() != 0){
+						tmpEnergyPiece.display(pg, lastAng, lastAng + angleUser);
+						tmpEnergyPiece.updateSpring(bBounceAll);
+						bBounceAll = false;
+					}	
+					
 					avgArc += tmpEnergyPiece.getRad();
-					lastAng += angleUser;
+					lastAng += angleUser + Assets.visPiecesSpace;
 				}// ------------------------------------------------------------------------end
 					// loop for users in district
 
@@ -252,24 +261,27 @@ public class SunburstVis extends GenericVis {
 				}
 				// -------------------------------------------------------------------------draw
 				// arc for the district
-				tmpDistrict.displayArc(pg, lastAng - lastNumPieces * angleUser,
-						lastAng, avgArc);
-
+				
+				if ((MainPApplet.getInstance()).dbCom != null && (MainPApplet.getInstance()).dbCom.getHeart() != 0){
+					tmpDistrict.displayArc(pg, lastAng - lastNumPieces * (angleUser + (float)Assets.visPiecesSpace), lastAng, avgArc);
+				}
+				else {
+					tmpDistrict.displayArc(pg, lastAng - lastNumPieces * (angleUser) - lastNumPieces * (float)Assets.visPiecesSpace, 
+											   lastAng - (float)Assets.visPiecesSpace, 
+											   avgArc);
+				}
 				// -------------------------------------------------------------------------reset
 				// avgArc calculation for next district
 				avgArc = 0;
 
 			}
-			// ---------------------------------------------------------------------------draw
-			// black circular "hole"
-			pg.fill(0);
-			pg.noStroke();
-			pg.ellipse(0, 0, Assets.visMinRadius, Assets.visMinRadius);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
+		
+		pg.popMatrix();
+		
 	}
 
 	public void displayLegend(PGraphics pg) {

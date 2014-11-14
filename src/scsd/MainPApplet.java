@@ -1,8 +1,10 @@
 package scsd;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.core.PShape;
 import toxi.physics2d.VerletPhysics2D;
 import util.Assets;
 import util.EventScheduler;
@@ -10,14 +12,13 @@ import vis.EnergyUserData;
 import vis.SunburstCenter;
 import vis.SunburstVis;
 
-import com.DashboardListener;
 import com.DatabaseParticipant;
 import com.VisDatabaseCom;
 
 
 
 
-public class MainPApplet extends PApplet implements DashboardListener{
+public class MainPApplet extends PApplet /* implements DashboardListener */{
 
 
 	private static final long serialVersionUID = 1L;
@@ -43,23 +44,23 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	EventScheduler scheduler;
 	
 	
-	
+	//////////////////////////////////////////////////////////////////////
+	// Facade Mask Objects 
+	//////////////////////////////////////////////////////////////////////
+	PGraphics   pgTextureUnfold1 		= null; 
+	PGraphics   pgTextureUnfold2 		= null; 
+	PGraphics   pgFacadeUnfold			= null;
+	PGraphics   pgTextureUnfoldRotated  = null;
+	float 		pgScaleFact 			= 1.5f; 
+	PImage 		testImage 				= null; 
+
 	
 	//-------------------------------------------------------------------
 	boolean comOn 				= true    ;
 	boolean comActive 			= false;
 	
-	//-------------------------------------------------------------------	
-	boolean mainDrawInfo 			= false;
-	boolean mainDrawTitle 			= false; 	
-	boolean mainDrawCityEnergy 		= false;
 	
-	boolean mainDrawLegend 			= false; 
-	boolean mainDrawCategory		= true; 
-	boolean mainDrawVisFullscreen 	= false; 
-	boolean mainDrawFacadeMask	  	= false; 
-	boolean mainDrawAuxLines		= true; 
-	boolean mainDrawSmooth 			= false; 
+	
 	//-------------------------------------------------------------------
 	boolean moveLegend 			= false;
 	float   scaleScreenFactor 	= 0.8f;
@@ -94,7 +95,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	public static boolean g_bFirstLaunch = true; 
 
 	//--------------------------------------------------------------------Database Com 
-	VisDatabaseCom 			dbCom; 
+	public VisDatabaseCom 			dbCom; 
 
 	public static boolean 	g_newResults;
 	public static boolean 	g_resultsPublished;
@@ -120,14 +121,19 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		
 	}*/
 	
+
+	
 	@Override
 	public void setup() {
 		//size(1800, 768, PConstants.OPENGL);
-		size(1024, 768, P3D);
-	   
+		size(1024, 768, P3D);//FIXME: we use JAVA2D for the shapes (svg) to be rendered OK 
+		
+		//((PGraphicsOpenGL)g).textureSampling(3);
+	    
 		//hint(ENABLE_NATIVE_FONTS);
-	    smooth();
-	    frameRate(30);
+	    
+		
+	    frameRate(60);
 
 	    Assets.load(this);
 	    
@@ -148,11 +154,39 @@ public class MainPApplet extends PApplet implements DashboardListener{
 //		g_resultsPublished 		= true;
 		
 		dbCom					= new VisDatabaseCom(); 
-		dbCom.setDashboardListener(this);
+		//dbCom.setDashboardListener(this);
 		
-		pgVisFullscreen 		= createGraphics(width, height, P3D);
+		//--------------------------------------------------------------------
+//		facadeDims 				= Dimensions.getInstance();
+//		facadeGeom  			= new Geometry(facadeDims.getPoints());
+
+	//	testImage 				= loadImage("tex3.jpg");
+	//	if (testImage !=null)   pgScaleFact	= testImage.width / facadeDims.totalWidth;
 	
+		pgScaleFact = 1.0f;
 		
+		//String mainRendererString = "P2D";
+		//String mainRendererString = "P3D";
+		
+//		pgTextureUnfold1		= createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
+//		pgTextureUnfold2 		= createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
+//		pgFacadeUnfold 			= createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
+//		pgTextureUnfoldRotated  = createGraphics((int)(facadeDims.totalWidth * pgScaleFact), (int)(facadeDims.totalHeight * pgScaleFact), P3D);
+//		
+		pgVisFullscreen 		= createGraphics(width, height, P3D);
+//	    pgVisSmall				= createGraphics((int)facadeDims.totalWidth, (int)facadeDims.totalHeight, P3D);
+		pgVisLegend				= createGraphics(width, height, JAVA2D);
+
+		if (!Assets.mainDrawSmooth){
+			noSmooth();
+//			pgTextureUnfold1.noSmooth();
+//			pgTextureUnfold2.noSmooth();
+//			pgFacadeUnfold.noSmooth();
+//			pgTextureUnfoldRotated.noSmooth();
+			pgVisFullscreen.noSmooth();
+			//pgVisSmall.smooth();
+			//pgVisLegend.smooth();
+		}
 		//--------------------------------------------------------------------
 //     	if (comOn && !mainCom.running){ 
 //     		println();
@@ -161,10 +195,9 @@ public class MainPApplet extends PApplet implements DashboardListener{
 //     	}
      	if (comOn && !dbCom.isRunning()){ 
      		println();
-		    println("Activate DB Communication!");
+		    println("MainPApplet::setup(): Activate DB Communication!");
 		    dbCom.start();
      	}
-		
 	}
 	
 	float x 	= Assets.maskOffsetX; 
@@ -177,19 +210,28 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	public void draw(){
 		//frame.setLocation(0, 0);
 
-		x 	= Assets.maskOffsetX; 
-		y	= Assets.maskOffsetY;
-		y2 	= (y - Assets.maskHeight) * 0.5f; 
-		dx 	= Assets.maskWidth + x;
-		dy2 = Assets.maskHeight + y2;
-
 		background(Assets.appletBGColor);
-		
-		renderVisSunburst(pgVisFullscreen, 1.0f);
-		image(pgVisFullscreen, 0, 0);
+		pushMatrix();
+			renderVisSunburst(pgVisFullscreen, 1.0f);
+			//translate(width/2, height/2);
+			//imageMode(CENTER);
+			image(pgVisFullscreen, 0, 0);
+		popMatrix();
+				
+		//--------------------------------draw participation legend ontop of everything 
+		if (Assets.mainDrawLegend) {
+			renderVisLegend(pgVisLegend, 0.8f);
+			pushMatrix();
+				translate(x, y+dy2);
+				image(pgVisLegend, 0, 0);
+			popMatrix();
+		}
 		
 		scheduler.update();
+		readCategory();
 		readDB();
+		readHeart();
+		dbCom.validateDBConnection();
 		
 		checkFirstLaunch();
 	}
@@ -197,7 +239,6 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	
 	
 	public void renderVisLegend(PGraphics pg, float scaleFactor){
-		
 		
 		pg.beginDraw();
 		pg.hint(ENABLE_NATIVE_FONTS);
@@ -209,7 +250,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		}
 		pg.updatePixels();
 		
-		if (mainDrawLegend){
+		if (Assets.mainDrawLegend){
 			pg.pushMatrix();
 				pg.scale(scaleFactor);
 				mainSunburstVisualization.displayLegend(pg);
@@ -225,11 +266,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		pg.background(0);
 		
 		//pg.hint(ENABLE_NATIVE_FONTS);//-------------------not needed for low-res displays? 
-	    //	pg.smooth();//------------------------------------this slows down extremely 
-		
-		
-		
-		//hi mori github
+	    //pg.smooth();//------------------------------------this slows down extremely 
 	    
 		//--------------------------------------------------FIXME: what is this about? 
 		pg.pushMatrix();
@@ -238,33 +275,49 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		pg.popMatrix();
 	
 		pg.pushMatrix();
-			pg.translate(pg.width/2, pg.height/2);
+			pg.translate(pg.width/2 + Assets.visZeroShiftX, pg.height/2 + Assets.visZeroShiftY);
 			pg.scale(scaleFactor);
 			mainSunburstVisualization.displaySunburst(pg);
+			mainCenterVis.display(pg);
 		pg.popMatrix();
 		
+//		pg.pushMatrix();
+//			pg.translate(pg.width/2 + Assets.visZeroShiftX, pg.height/2 + Assets.visZeroShiftY);
+//			pg.scale(scaleFactor);
+//			
+//		pg.popMatrix();
+//		
 		pg.endDraw();
 	}
 	
 	
 	@Override
 	public void keyPressed(){    
-		
 		mainSunburstVisualization.keyPressed(key);
 		mainUserData.keyPressed(key);
 		switch(key){
 			//--------------------------------------------------------flags for facade masks and rendering     
-		    case 'f': mainDrawVisFullscreen = !mainDrawVisFullscreen; 	break; 
-		    case 'm': mainDrawFacadeMask 	= !mainDrawFacadeMask; 		break; 
+		    case 'f': Assets.mainDrawVisFullscreen = !Assets.mainDrawVisFullscreen; 	break; 
+		    case 'm': Assets.mainDrawFacadeMask 	= !Assets.mainDrawFacadeMask; 		break; 
 		    //case 'g': Assets.drawGUI	= !Assets.drawGUI; 				break; //FIXME not working
-		    case 'l': mainDrawAuxLines		= !mainDrawAuxLines; 		break;
-		    case 'g': mainDrawSmooth		= !mainDrawSmooth; 		break;
+		    case 'l': Assets.mainDrawAuxLines		= !Assets.mainDrawAuxLines; 		break;
+		    case 'g': Assets.mainDrawSmooth		= !Assets.mainDrawSmooth; 		break;
 		    
 		    //--------------------------------------------------------flags for drawing auxiliary visualization info    
 			//case'1': mainDrawInfo 		= !mainDrawInfo; break;
-		    case '2': mainDrawLegend 		= !mainDrawLegend; break;
-		    case '3': mainDrawCategory 		= !mainDrawCategory; break; 
+		    case '2': Assets.mainDrawLegend 		= !Assets.mainDrawLegend; break;
+		    case '3': Assets.mainDrawCategory 		= !Assets.mainDrawCategory; break; 
 		    
+		    case 'i': 
+		    	//if (Assets.mainDrawCategory) {
+		    	//	Assets.iconTestingID = ((Assets.iconTestingID + 1) % Assets.iconsCategory.size());
+		    	//}
+		    	//else if (Assets.iconTestingOn) {
+		    		//Assets.iconTestingID = ((Assets.iconTestingID + 1) % Assets.iconsCategoryTesting.size());
+		    		Assets.iconTestingID = ((Assets.iconTestingID + 1) % Assets.iconsCategory.size());
+		    	//}
+		    break;
+		   
 		    
 		    //case'3': mainDrawTitle 		= !mainDrawTitle; break;
 		    //case'4': mainDrawCityEnergy = !mainDrawCityEnergy; break;
@@ -301,15 +354,26 @@ public class MainPApplet extends PApplet implements DashboardListener{
 //		        break;
 //		      } 
 //		   break;
-		    
+		   case 'r':  mainSunburstVisualization.reset(); break;
+		   case 'c': 
+			   Assets.colorTestingID = (Assets.colorTestingID+1)%5; 
+			   Assets.iconTestingID = (Assets.iconTestingID+1)%5;
+			   break;
 		   case 'n':
-			   int 	randId         = (int)(random(0,5));
-			   float randElectro  = random(20,50);
-			   float randGas      = random(10,30);
-			   float randEnergy   = randElectro / 0.15f + randGas / 0.05f; 
+			   //int 	randId         = (int)(random(1,6));
+			   int randId 		= Assets.colorTestingID + 1;
+			   float userInput  = (int)(random(1,3));
+			   //float userInput  = randId;
+			   
+			   float randGas = 0;
+			   //float randGas      = random(10,30);
+			   //float randEnergy   = randElectro / 0.15f + randGas / 0.05f; 
+			   float randEnergy   = 0;
+
+			   
 			   String entryStamp = day() + "-" + hour() + ":" + minute() + ":" + second(); 
 			   entryStamp = "user"+randId;
-			   mainUserData.addEnergyUser(randId, entryStamp, randElectro, randGas, randEnergy);
+			   mainUserData.addEnergyUser(randId, entryStamp, userInput, randGas, randEnergy);
 		   break;
 		  
 		   case 'p': 
@@ -324,8 +388,8 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		     } else if (scaleScreen){
 		       println("scaleScreenFactor = " + scaleScreenFactor);
 		     } else if (debugScreen) {
-		       println ("visZeroX = " + Assets.visZeroX);
-		       println ("visZeroY = " + Assets.visZeroY);
+		       println ("visZeroX = " + Assets.visZeroShiftX);
+		       println ("visZeroY = " + Assets.visZeroShiftY);
 		     }
 		   break;
 		  }
@@ -344,6 +408,7 @@ public class MainPApplet extends PApplet implements DashboardListener{
 	public void mouseReleased(){
 		move = false;
 	}
+	 
 	
 	/** Query DB for new participants */
 	public void readDB(){
@@ -357,20 +422,16 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		      
 		      if (tmpParticipant != null) {
 		    	String cardID 		= tmpParticipant.getCardID();
-				int devID 			= tmpParticipant.getDevID();
+				//int devID 			= tmpParticipant.getDevID();
 				int catID			= tmpParticipant.getCatID();
 				int prefID			= tmpParticipant.getPrefID();
 				long time			= tmpParticipant.getTstamp();
 				
-				//System.out.println("MainPApplet::readDB():  Participant: " + "cID=" + cardID + ":" + "devID=" + devID + ":" + "cat=" + catID + ":" + "pref="+prefID + ":" + time);
+				int devID = catID;//FIXME: document better! due to lack of different locations to compare from we use the categories as locations
+
+				//System.out.println("MainPApplet::readDB(): Participant: " + cardID + ":" + devID + ":" + catID + ":" + prefID + ":" + time);
 				
-				float feedbackVal = 0f; 
-				switch(prefID) {
-					case 0: feedbackVal = 30; break; 
-					case 1: feedbackVal = 60; break; 
-					case 2: feedbackVal = 90; break; 
-				}
-				mainUserData.addEnergyUser(catID,cardID,feedbackVal, 0, 0);
+				mainUserData.addEnergyUser(devID,cardID,prefID, 0, 0);
 		      }
 		    }
 		    dbCom.setNewResults(false);
@@ -378,75 +439,47 @@ public class MainPApplet extends PApplet implements DashboardListener{
 		  }
 	}
 	
-	@Override
-	public void categorySelected(int _catID) {
-		System.out.println("MainPApplet::categorySelected("+_catID+")");
-		mainSunburstVisualization.reset();
-	}
-
-	@Override
-	public void sentimentSubmitted(int _prefID, String _cardID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void specialCategorySelected(int _val) {
-		// TODO Auto-generated method stub
-		
+	public void readHeart(){
+		if (dbCom.isNewHeart()){
+			System.out.println("MainPApplet::readHeart() newHeart=" + dbCom.getHeart());
+			mainSunburstVisualization.reset();
+			dbCom.reset();
+			
+			dbCom.setNewHeart(false);
+			dbCom.setHeartPublished(true);
+		}
+	} 
+	
+	public void readCategory(){
+		if (dbCom.isNewCategory()){
+			System.out.println("MainPApplet::readCategory() newCategory=" + dbCom.getActiveCategoryID());
+			//set category
+			mainSunburstVisualization.reset();
+			dbCom.reset();
+			dbCom.setNewCategory(false);
+			dbCom.setCategoryPublished(true);
+		}
 	}
 	
 	public void checkFirstLaunch(){
 		if (g_bFirstLaunch){
-		    println("APP first launch... #frames " + frameCount); 
+		    println("MainPApplet::checkFirstLaunch(): APP first launch... #frames " + frameCount); 
 		    g_bFirstLaunch = false; 
 		}
 	}
 	
 	
 	
-	/** Draws the mask corresponding the facade vis mapping */
-	public void drawFacadeMask(){
-		pushMatrix();
-			rectMode(CORNER);
-			fill(0);
-			noStroke();
-			rect(0, 0, Assets.maskOffsetX, width);	//-------------------------------------------------------------#1
-			rect(Assets.maskOffsetX, 0, width - Assets.maskOffsetX, Assets.maskOffsetY);//--------------------------------------#2
-			rect(Assets.maskOffsetX + Assets.maskWidth, Assets.maskOffsetY, width - Assets.maskOffsetX - Assets.maskWidth, Assets.maskHeight);//-----#3
-			rect(Assets.maskOffsetX, Assets.maskOffsetY + Assets.maskHeight, width - Assets.maskOffsetX, height - Assets.maskOffsetY - Assets.maskHeight);//---#4
-			
-			noFill(); 
-			strokeWeight(1.f);
-			stroke(0, 255, 0);
-			rect(Assets.maskOffsetX, Assets.maskOffsetY, Assets.maskWidth, Assets.maskHeight);
-		popMatrix(); 
-	}
 	
-	public void drawAuxLines(){
-//		x 	= Assets.maskOffsetX; 
-//		y	= Assets.maskOffsetY;
-//		
-//		y2 	= (y - Assets.maskHeight) * 0.5f; 
-//		dx 	= Assets.maskWidth + x;
-//		dy2 = Assets.maskHeight + y2;
-//		
-//		println("Assets.maskOffsetY: " + Assets.maskOffsetY);
-//		
-		pushMatrix();
-			noFill(); 
-			strokeWeight(1.0f);
-			
-			//draw guides for facade mask window pos 
-			stroke(Assets.maskStrokeColor1);
-			line(x, 0, x, height);
-			line(0, y, width, y);
-			
-			//draw guides for the center of the texture where the visualization is rendered 
-			stroke(Assets.ColorCYAN);
-			line(x, y2, dx, dy2);
-			line(x, dy2, dx, y2);		
-		popMatrix();
+	public void init(){
+        if(frame!=null){
+          frame.removeNotify();//make the frame not displayable
+          frame.setResizable(false);
+          frame.setUndecorated(true);
+          println("MainPApplet::init(): Frame is at "+frame.getLocation());
+          frame.addNotify();
+        }
+      super.init();
 	}
 	
 	public static void main(String args[]) {

@@ -1,6 +1,7 @@
 package vis;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import scsd.MainPApplet;
 import toxi.geom.Vec2D;
@@ -42,7 +43,7 @@ class SunburstPiece{
    float gas; 
    float energy; 
    
-   Timer timer;
+   Timer activeUsertimer;
    boolean bActive = true; 
    
    /*
@@ -66,10 +67,14 @@ class SunburstPiece{
        electro 	= _electro; 
        
        //TODO: TRICKY, document it somewhere
-       //MAP values that come in EURO (from users) to values in PIXELS (for the vis)
+       //REVEALIT: MAP values that come in EURO (from users) to values in PIXELS (for the vis)
+       //SCSD: MAP values that come in YES/NO (1/2) (from users) to values in PIXELS (for the vis)
        float sum 	= gas+electro; 
-       rad 			= PApplet.map(sum, 0, Assets.visMaxUserInputValue, Assets.visMinRadius, Assets.visMaxRadius);
+       //rad 			= PApplet.map(sum, 0, Assets.visMaxUserInputValue, Assets.visMinRadius, Assets.visMaxRadius);
        
+       //SCSD: value starts at 1 //TODO think of a more sophisticated way 
+       rad 			= PApplet.map(sum, 1, Assets.visMaxUserInputValue, Assets.visMinRadius, Assets.visMaxRadius);
+           
        colorActive = 255;
        colorNormal = 100;
        
@@ -84,11 +89,13 @@ class SunburstPiece{
        polarControlPt.set(1,angle).toCartesian();
        
        p1 = new Particle(0,0);
+       //p2 = new Particle(polarControlPt.x * rad * 1.2f ,polarControlPt.y * rad * 1.2f); 
        p2 = new Particle(polarControlPt.x * rad * 0.5f ,polarControlPt.y * rad * 0.5f); 
        p1.lock();
        
        // Make a spring connecting both Particles
-       spring = new VerletSpring2D(p1,p2,rad,0.002f);
+       spring = new VerletSpring2D(p1,p2,rad,0.0005f);
+       //spring.setRestLength(0.2f);
 
       // Anything we make, we have to add into the physics world
       _worldPhysics.addParticle(p1);
@@ -98,12 +105,13 @@ class SunburstPiece{
       //TODO remember the logic of this if/else block (13.08.2013)
       // set a quicker timer for white-to-color change for energy piece if we are just launching the application (usually this is the researcher, no user interaction is involved) 
       
-      if (MainPApplet.getInstance().frameCount < 60){
-    	  timer = new Timer(1000);
-      } else {
-    	  timer = new Timer(Assets.visActiveUserSecs * 1000);
-      }
-      timer.start();
+//      if (MainPApplet.getInstance().frameCount < 60){
+//    	  timer = new Timer(1000);
+//      } else {
+//    	  timer = new Timer(Assets.visActiveUserSecs * 1000);
+//      }
+      activeUsertimer = new Timer(Assets.visActiveUserSecs * 1000);
+      activeUsertimer.start();
      
 
     } 
@@ -111,47 +119,61 @@ class SunburstPiece{
    // arc begin and end controlled from outside because can change
    // radius can be controlled from inside and animated 
    void display(PGraphics pg, float _arcBegin, float _arcEnd){
-	   
+	 // if (true) return;
+	  
 	  pg.pushMatrix();
       float d = PApplet.dist(p1.x, p1.y,p2.x, p2.y);
       
       if (id == Assets.cityId){
 	      pg.noFill();
 	      pg.stroke(255);
-	      pg.strokeWeight(Assets.visArcThickness);
+	      pg.strokeWeight(Assets.visDistrictArcThickness);
 	      pg.arc(0,0,d,d,_arcBegin,_arcEnd);
       } else {
     	  //------------------------------------------------set normal color (corresponding to the category / district 
-    	  if (timer.isFinished()){
-    		  pg.fill(colorNormal);//-----------------------TODO: make it a bit transparent (as in reveal-it original) ?  
-    	  //------------------------------------------------set active color (during initial animation) FIXME: too long 
+    	  if (activeUsertimer.isFinished()){
+    		  // draw the piece a bit transparent (as in reveal-it original) ?  
+    		  pg.fill(colorNormal, Assets.visBurstPieceAlpha);
+    	  //------------------------------------------------set active color (during initial animation) 
+    	  //FIXME: too long 
     	  } else {
-    		  pg.fill(colorActive); 
+    		  // draw the piece white while still active 
+    		  pg.fill(255); 
     	  }
-    	pg.fill(colorNormal);  //test: set always color 
-        //pg.noStroke();
-        pg.strokeWeight(1.0f); //test: draw strokes of pieces FIXME: does not work 
-        pg.stroke(0);
-        pg.arc(0,0,d,d,_arcBegin,_arcEnd);
-        
-        /*
-        pushMatrix();
-          fill(color(red(colorNormal),green(colorNormal),blue(colorNormal),200));  
-          rotate(_arcEnd * 0.5);
-          textFont(g_fontLastUser, g_fontSize_2 * 0.8);    
-          text("TestName" + frameCount % 10, d * 0.8, 0);  
-        popMatrix();
-        */
+ 
+    	  pg.arc(0,0,d,d,_arcBegin,_arcEnd);
 
-        //fill(255,255,0,0);
-        if (true){
-          // Display the particles
+    	// Display the particles that drive the springing effect 
+    	if (Assets.debugOn){
           p1.display(pg);
           p2.display(pg);
         }
-        if (!timer.isFinished() && (MainPApplet.getInstance().frameCount % 20 * 30 == 0)){
+        if (!activeUsertimer.isFinished() && (MainPApplet.getInstance().frameCount % 20 * 30 == 0)){
         //  updateSpring(1.05);  
         }
+      }
+      
+      //--------------draw a line to mark the beginning of the pie piece  
+      if (Assets.visPieceLineDraw){
+	      pg.pushMatrix();
+	      		if (Assets.visPieceLineSmooth)
+	      			pg.smooth();
+	      		
+	      		pg.strokeWeight(Assets.visPieceLineStrokeWidth); 
+	      		//pg.colorMode(PConstants.HSB, 360, 100, 100);
+		        //pg.stroke(MainPApplet.getInstance().color(Assets.visPieceLineColor, 100, 100));
+	      		
+	      		pg.stroke(Assets.visPieceLineColor);
+		        pg.rotate(_arcBegin);
+		        pg.line(0, 0, d * Assets.visPieceLineScale, 0);
+		        
+		        pg.strokeWeight(1.0f); 
+		        //pg.colorMode(PConstants.ARGB);
+		        pg.noStroke();
+
+	      		if (Assets.visPieceLineSmooth)
+	      			pg.noSmooth();
+	      pg.popMatrix();
       }
       pg.popMatrix();
       

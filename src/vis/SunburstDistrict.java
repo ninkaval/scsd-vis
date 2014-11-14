@@ -16,7 +16,7 @@ public class SunburstDistrict {
 	String code;
 	int col;
 	
-	boolean drawLabels 	= true; 
+	boolean drawLabels 	= false; 
 	boolean drawArcDeco = true; 
 	
 	float sumExpenses; // gas + electo from DB in EURO
@@ -74,7 +74,7 @@ public class SunburstDistrict {
 
 		nameThickness = MainPApplet.getInstance().textWidth(name);
 		codeThickness = MainPApplet.getInstance().textWidth(code);
-		System.out.println(name + " " + nameThickness);
+		//System.out.println(name + " " + nameThickness);
 
 		// col = color(_colorInt);
 
@@ -113,7 +113,9 @@ public class SunburstDistrict {
 
 		// Sum up energy consumption
 		sumConsumption += _newConsumption;
-		//System.out.println("_newExp = " + _newExp + " _newConsumption = "			+ _newConsumption + " numUsers = " + numUsers);
+		
+//		System.out.println("SunburstDistrict::notifyUpdate(): _newExp = " + _newExp + " _newConsumption = "
+//				+ _newConsumption + " numUsers = " + numUsers);
 
 		// printme();
 	}
@@ -138,11 +140,16 @@ public class SunburstDistrict {
 	void displayArc(PGraphics pg, float _beginAngle, float _endAngle, float _avgArcRadius) {
 		
 		pg.pushMatrix();//------------------------------------START DRAWING DISTRICT ARC 
-			pg.noFill();
-			// pg.fill(col);
-			pg.stroke(col);
-			pg.strokeWeight(Assets.visArcThickness);
-
+			//pg.fill(col);
+			if ((MainPApplet.getInstance()).dbCom != null && (MainPApplet.getInstance()).dbCom.getHeart() == 0){
+				pg.fill(col);
+			}
+			else {
+				pg.noFill();
+				pg.stroke(col);
+				//pg.stroke(255);
+				pg.strokeWeight(Assets.visDistrictArcThickness);
+			}
 			// TRICKY: DONT DELETE THIS COMMENTS
 			// -----------------------------------------------
 			// MAP values that come in EURO (from users) to values in PIXELS (for the vis)
@@ -154,18 +161,31 @@ public class SunburstDistrict {
 			// -----------------------------------------------
 			avgExpRad = _avgArcRadius;
 			arcPos.set(_avgArcRadius * 0.5f, _beginAngle).toCartesian();
-			pg.color(255);
-			pg.arc(0, 0, _avgArcRadius * 1.f, _avgArcRadius * 1.f, _beginAngle,_endAngle);
+			
+			if (Assets.visDistrictArcSmooth){
+				pg.smooth();
+				pg.arc(0, 0, _avgArcRadius * 1.f, _avgArcRadius * 1.f, _beginAngle,_endAngle);
+				pg.noSmooth();
+			}
+			else 
+				pg.arc(0, 0, _avgArcRadius * 1.f, _avgArcRadius * 1.f, _beginAngle,_endAngle);
+			
 
 			//------------------------------------------------draw the ending decoration of the arc 
-				Vec2D endDir 	= new Vec2D();
-				endDir.set(1, _endAngle).toCartesian();
-				Vec2D endPos1 	= new Vec2D(endDir);
-				endPos1.y 		*= _avgArcRadius * 0.5;
-            if (drawArcDeco){
-				pg.line(endPos1.x, endPos1.y, endPos1.x + endDir.x * 50, endPos1.y + endDir.y * 50);
+			Vec2D endDir 	= new Vec2D();
+			endDir.set(1, _endAngle).toCartesian();
+			Vec2D endPos1 	= new Vec2D(endDir);
+			endPos1.y 		*= _avgArcRadius * 0.5;
+			
+			
+			
+            if (Assets.visDistrictArcDecoLineDraw){
+				//pg.line(endPos1.x, endPos1.y, endPos1.x + endDir.x * 50, endPos1.y + endDir.y * 50);
+				
+				pg.line(_avgArcRadius, 0.f, _avgArcRadius * 0.5f, 0.f);
+				
 			}
-        pg.popMatrix(); //------------------------------------END DRAW DISTRICT ARC  
+		pg.popMatrix(); //------------------------------------END DRAW DISTRICT ARC  
 
 		if (drawLabels) {
 			pg.pushMatrix();//--------------------------------START DRAWING LABELS 
