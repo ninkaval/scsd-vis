@@ -63,61 +63,36 @@ public class VisDatabaseCom extends DatabaseCom {
 	
 	
 	/** just see every once in a while of the DB connection is still valid */
-
 	public void validateDBConnection(){
+		
+		if (dbValidTimer.isFinished()){
+			try {
+				boolean isClosed = connection.isClosed();
+				System.out.println("VisDatabaseCom::validateDBConnection() isClosed=" + isClosed);
 
-	if (dbValidTimer.isFinished()){
+				//recreate connection of closed 
+				if (isClosed) {
+						System.out.println("VisDatabaseCom::validateDBConnection() recreating... the connection!");
+						connection = null;
+						Class.forName("com.mysql.jdbc.Driver").newInstance();
+						connection = DriverManager.getConnection(connectionURL, username, pw);
+						System.out.println(connection.toString());
+				}
+				dbValidTimer.reset();
 
-	try {
-
-	boolean isClosed = connection.isClosed();
-
-	System.out.println("DashboardDatabaseCom::validateDBConnection() isClosed=" + isClosed);
-
-
-	//recreate connection of closed 
-
-	if (isClosed) {
-
-	System.out.println("DashboardDatabaseCom::validateDBConnection() recreating... the connection!");
-
-	connection = null;
-
-	Class.forName("com.mysql.jdbc.Driver").newInstance();
-
-	connection = DriverManager.getConnection(connectionURL, username, pw);
-
-	System.out.println(connection.toString());
-
-	}
-
-
-	dbValidTimer.reset();
-
-	} catch (SQLException e) {
-
-	e.printStackTrace();
-
-	} catch (InstantiationException e) {
-
-	e.printStackTrace();
-
-	} catch (IllegalAccessException e) {
-
-	e.printStackTrace();
-
-	} catch (ClassNotFoundException e) {
-
-	e.printStackTrace();
-
-	} catch (NullPointerException e) {
-
-	e.printStackTrace();
-
-	}
-
-	}
-
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				System.out.println("VisDatabaseCom::validateDBConnection() NullPointerException");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void reset() {
@@ -165,8 +140,15 @@ public class VisDatabaseCom extends DatabaseCom {
 			       	 //------------active category in DB has changed & is not heart category 
 			       	 if (dbID != activeCategoryID){
 			       		 System.out.println("VisDatabaseCom::dbCategoryPublished: new category in DB: " + dbID);
+			       		 
 			       		 //--------set the new active category for the app
 			       		 activeCategoryID 		 = dbID; 
+			       		 
+			       		 if (dbID > 0) //just to make sure we dont get a negative index access
+			       			 activeCategoryString    = Assets.categoryNames[dbID-1];
+			       		 else 
+			       			activeCategoryString	 = Assets.categoryNames[5];
+			       		 
 			       		 dbNewCategory       	 = true;			//set flag to notify new results 
 			       		 dbCategoryPublished   	 = false; 			//set flag to false so main app can publish new results
 			       		 
@@ -232,11 +214,13 @@ public class VisDatabaseCom extends DatabaseCom {
 						dbNewResults       	 = true;			//set flag to notify new results 
 						dbResultsPublished   = false; 			//set flag to false so main app can publish new results
 					}
+					
+
 				}
 				
 				if (dbHeartPublished) {
 					//System.out.println("dbHeartPublished");
-					
+	       			
 			        String sqlString 	= "select * from heart";
 			        
 			       	stmtHeart 	= connection.createStatement();
@@ -262,6 +246,7 @@ public class VisDatabaseCom extends DatabaseCom {
 				}
 				
 			} catch (NullPointerException e) {
+				System.out.println("VisDatabaseCom::run() NullPointerException");
 				e.printStackTrace();
 			 
 			} catch (Exception e) {

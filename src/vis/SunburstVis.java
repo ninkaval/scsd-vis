@@ -174,8 +174,6 @@ public class SunburstVis extends GenericVis {
 			district = (SunburstDistrict) visMapDistricts.get(_id);
 			district.notifyUpdate(_electro + _gas, _energy);
 		} else {
-			if (debug)
-				System.out.println("notifyNewUser: user from a new district!");
 			
 			//------------------otherwise create a new list (for a new district) 
 			ArrayList<SunburstPiece> participantList = new ArrayList<SunburstPiece>();
@@ -189,6 +187,9 @@ public class SunburstVis extends GenericVis {
 			String dCode 	= MainPApplet.mainUserData.getDistrictCode(_id);
 			int dColor 		= MainPApplet.mainUserData.getDistrictColor(_id);
 
+			if (debug)
+				System.out.println("notifyNewUser: user from a new district " + dName +"!");
+			
 			district = new SunburstDistrict(_id, dName, 
 												 dCode, 
 												 dColor,

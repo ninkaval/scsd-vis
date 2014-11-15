@@ -84,9 +84,9 @@ public class EventScheduler{
 //        MainPApplet.mainCenterVis.setContent_DISTRICTS();
 //    }
     
-    if (applet.frameCount % intervalShowVisitorsParticipation == 0){
-        MainPApplet.mainCenterVis.setContent_VISITORS();
-    }
+//    if (applet.frameCount % intervalShowVisitorsParticipation == 0){
+//        MainPApplet.mainCenterVis.setContent_VISITORS();
+//    }
     
 //    if (applet.frameCount % intervalDoInvitation1 == 0){ 
 //      float ran = applet.random(1,10);

@@ -264,7 +264,6 @@ public class DatabaseCom extends Thread {
        		 System.out.println("DatabaseCom::queryCategory(): new category in DB: " + dbID);
        		 //--------set the new active category for the app
        		 activeCategoryID = dbID; 
-       		 activeCategoryString = rs.getString(2);
        		 ret = true; 
        	 } 
        	 else ret = false; 

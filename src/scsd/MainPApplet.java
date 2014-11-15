@@ -125,6 +125,7 @@ public class MainPApplet extends PApplet /* implements DashboardListener */{
 	@Override
 	public void setup() {
 		//size(1800, 768, PConstants.OPENGL);
+		//size(1024, 768, PConstants.OPENGL);
 		size(displayWidth, displayHeight, P3D);//FIXME: we use JAVA2D for the shapes (svg) to be rendered OK 
 		
 		//((PGraphicsOpenGL)g).textureSampling(3);
@@ -451,13 +452,16 @@ public class MainPApplet extends PApplet /* implements DashboardListener */{
 	
 	public void readCategory(){
 		if (dbCom.isNewCategory()){
-			System.out.println("MainPApplet::readCategory() newCategory=" + dbCom.getActiveCategoryID());
+			
+			System.out.println("MainPApplet::readCategory() newCategory=" + dbCom.getActiveCategoryID() + " " +dbCom.getActiveCategoryString());
+			
 			//set category
 			mainSunburstVisualization.reset();
 			dbCom.reset();
 			dbCom.setNewCategory(false);
 			dbCom.setCategoryPublished(true);
 			mainCenterVis.setContent(dbCom.getActiveCategoryString());
+			
 		}
 	}
 	

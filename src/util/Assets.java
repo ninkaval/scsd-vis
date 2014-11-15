@@ -13,6 +13,11 @@ public class Assets {
 	// Assets Facade Masks GUI 
 	////////////////////////////////////////////////////////////////////////////////
 
+	// hard-coded category names FIXME: quick hack for Riga due to strange signs in their alphabet 
+	// which causes errors in loading them from file or DB 
+	public static String[] categoryNames = new String[6];
+	
+	
 	public static float maskStrokeWeight 	= 1.0f; 
 	public static int 	maskBGColor	   		= 0;
 	public static int   maskStrokeColor1	= 255;
@@ -224,6 +229,15 @@ public class Assets {
 	
 	
 	public static void load(PApplet p) {
+
+		//-------------------------------------------------
+		//FIXME to be done better, now hard coded due to special letters 
+		categoryNames[0] = "ATTISTIBA";//"ATTĪSTĪBA";  
+		categoryNames[1] = "TRANSPORTS";
+		categoryNames[2] = "VIDE";
+		categoryNames[3] = "DROŠIBA";//"DROŠĪBA";
+		categoryNames[4] = "KULTURA";//"KULTŪRA";  
+		categoryNames[5] = "RIGA";
 		
 		heartStateTimer		= new Timer(1 * heartStateSeconds * 1000);
 		

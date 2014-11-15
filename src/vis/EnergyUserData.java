@@ -112,6 +112,7 @@ public class EnergyUserData
        // districtInfos.add(new DistrictInfo(Integer.parseInt(pieces[0]), pieces[1], pieces[2], Integer.parseInt(pieces[3]) ) );
         //districtInfos.put(Integer.parseInt(pieces[0]), new DistrictInfo(Integer.parseInt(pieces[0]), pieces[1], pieces[2], unhex(pieces[3])));
         
+        //switch on HSB mode 
          MainPApplet.getInstance().colorMode(PConstants.HSB, 360, 100, 100);
          int id 		= Integer.parseInt(pieces[0]);
          String name	= pieces[1];
@@ -119,6 +120,8 @@ public class EnergyUserData
          int colorInt	= PApplet.unhex(pieces[3]);
         		 
          districtInfos.put(Integer.parseInt(pieces[0]), new DistrictInfo(id, name, code, colorInt));
+         
+       //switch on HSB mode 
          MainPApplet.getInstance().colorMode(PConstants.RGB, 255);
       }
       

@@ -1,5 +1,7 @@
 package vis;
 
+import javax.security.auth.PrivateCredentialPermission;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -190,12 +192,26 @@ public class SunburstCenter{
 		pg.noStroke();
 		pg.ellipse(0, 0, tmpRad, tmpRad);
  			
+		String message = "";
+		
+		if ((MainPApplet.getInstance()).dbCom != null && (MainPApplet.getInstance()).dbCom.getHeart() == 0){
+			pg.pushMatrix();
+			pg.scale(1.2f);
+			pg.shapeMode(PConstants.CENTER);
+			pg.shape(Assets.iconCategory6, 0f, 0f);
+			pg.popMatrix();
+			
+		     //--------Draw string along circle-----
+			message = "RIGA";
+		}      
+		else 
+			message = line2; // the category name 
+		
  	// draw circle text content 
       pg.textAlign(PConstants.CENTER);
       pg.textFont(Assets.visFontCenter, PApplet.dist(p1c1.x,p1c1.y,p2c1.x,p2c1.y));
       
-      //--------Draw string along circle-----
-      String message = line2; 
+
       tmpRad = (0.5f * tmpRad) * 0.6f; // draw a bit inside of circle
       // calc overall arclength of word 
       float wordArcLength = 0;
@@ -240,9 +256,8 @@ public class SunburstCenter{
         // Move halfway again
         arclength += w/2;
       }
-      
-      
-      float txtHeight = pg.textAscent() + pg.textDescent();
+     
+      //float txtHeight = pg.textAscent() + pg.textDescent();
       
       // Draw line1 content (white) 
 //      pg.fill(255);
