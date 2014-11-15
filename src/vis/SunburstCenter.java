@@ -47,7 +47,7 @@ public class SunburstCenter{
 	  bboxh = 100;
   
 	  line1 = "";
-	  line2 = "DEBUG";
+	  line2 = "";
 	  line3 = "";
 	    
 	  //-----------------------------------------------------------------------
