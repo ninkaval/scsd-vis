@@ -163,9 +163,9 @@ public class SunburstDistrict {
 			arcPos.set(_avgArcRadius * 0.5f, _beginAngle).toCartesian();
 			
 			if (Assets.visDistrictArcSmooth){
-				pg.smooth();
+				//pg.smooth();
 				pg.arc(0, 0, _avgArcRadius * 1.f, _avgArcRadius * 1.f, _beginAngle,_endAngle);
-				pg.noSmooth();
+				//pg.noSmooth();
 			}
 			else 
 				pg.arc(0, 0, _avgArcRadius * 1.f, _avgArcRadius * 1.f, _beginAngle,_endAngle);

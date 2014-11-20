@@ -156,8 +156,8 @@ class SunburstPiece{
       //--------------draw a line to mark the beginning of the pie piece  
       if (Assets.visPieceLineDraw){
 	      pg.pushMatrix();
-	      		if (Assets.visPieceLineSmooth)
-	      			pg.smooth();
+	      		//if (Assets.visPieceLineSmooth)
+	      		//	pg.smooth();
 	      		
 	      		pg.strokeWeight(Assets.visPieceLineStrokeWidth); 
 	      		//pg.colorMode(PConstants.HSB, 360, 100, 100);
@@ -171,8 +171,8 @@ class SunburstPiece{
 		        //pg.colorMode(PConstants.ARGB);
 		        pg.noStroke();
 
-	      		if (Assets.visPieceLineSmooth)
-	      			pg.noSmooth();
+	      		//if (Assets.visPieceLineSmooth)
+	      		//	pg.noSmooth();
 	      pg.popMatrix();
       }
       pg.popMatrix();
