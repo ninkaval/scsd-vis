@@ -81,16 +81,16 @@ public class VisDatabaseCom extends DatabaseCom {
 				dbValidTimer.reset();
 
 			} catch (SQLException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (InstantiationException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			} catch (NullPointerException e) {
 				System.out.println("VisDatabaseCom::validateDBConnection() NullPointerException");
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}
@@ -246,11 +246,11 @@ public class VisDatabaseCom extends DatabaseCom {
 				}
 				
 			} catch (NullPointerException e) {
-				System.out.println("VisDatabaseCom::run() NullPointerException");
-				e.printStackTrace();
+				//System.out.println("VisDatabaseCom::run() NullPointerException");
+				//e.printStackTrace();
 			 
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			finally {
 				//////////////////////////////////////////////

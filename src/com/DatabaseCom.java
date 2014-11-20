@@ -84,9 +84,9 @@ public class DatabaseCom extends Thread {
 			System.out.println(connection.toString());
 			
 			//System.out.println("DBCommunicator created!");
-		} catch (Exception ex) { 
-			System.out.println("DatabaseCom(): " + ex); 
-			ex.printStackTrace(); 
+		} catch (Exception e) { 
+			System.out.println("DatabaseCom(): " + e); 
+			//ex.printStackTrace(); 
 		} 	
 		
 	}
@@ -190,7 +190,7 @@ public class DatabaseCom extends Thread {
 	        		 num = rs.getInt(1);
 	        	 }
 	        } catch (Exception e) {
-	        	e.printStackTrace(); 
+	        	//e.printStackTrace(); 
 	        } finally {
 	            if (rs != null) {
 	                try {
@@ -223,7 +223,7 @@ public class DatabaseCom extends Thread {
         		 num = rs.getInt(1);
         	 }
         } catch (Exception e) {
-        	e.printStackTrace(); 
+        	//e.printStackTrace(); 
         } finally {
             if (rs != null) {
                 try {
@@ -269,7 +269,7 @@ public class DatabaseCom extends Thread {
        	 else ret = false; 
        		 
        } catch (Exception e) {
-       	e.printStackTrace(); 
+       	//e.printStackTrace(); 
        } finally {
            if (rs != null) {
                try {
@@ -318,7 +318,7 @@ public class DatabaseCom extends Thread {
        	 }
        		 
        } catch (Exception e) {
-       	e.printStackTrace(); 
+       	//e.printStackTrace(); 
        } finally {
            if (rs != null) {
                try {

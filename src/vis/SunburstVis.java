@@ -277,7 +277,7 @@ public class SunburstVis extends GenericVis {
 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
