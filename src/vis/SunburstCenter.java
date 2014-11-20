@@ -202,7 +202,7 @@ public class SunburstCenter{
 			pg.popMatrix();
 			
 		     //--------Draw string along circle-----
-			message = "RIGA";
+			message = Assets.categoryNames[5];
 		}      
 		else 
 			message = line2; // the category name 
