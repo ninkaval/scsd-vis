@@ -177,13 +177,14 @@ public class MainPApplet extends PApplet /* implements DashboardListener */{
 //	    pgVisSmall				= createGraphics((int)facadeDims.totalWidth, (int)facadeDims.totalHeight, P3D);
 		pgVisLegend				= createGraphics(width, height, JAVA2D);
 
-		if (!Assets.mainDrawSmooth){
-			noSmooth();
-//			pgTextureUnfold1.noSmooth();
+		if (Assets.mainDrawSmooth){
+			smooth();
+			//			pgTextureUnfold1.noSmooth();
 //			pgTextureUnfold2.noSmooth();
 //			pgFacadeUnfold.noSmooth();
 //			pgTextureUnfoldRotated.noSmooth();
-			pgVisFullscreen.noSmooth();
+			pgVisFullscreen.smooth();
+			
 			//pgVisSmall.smooth();
 			//pgVisLegend.smooth();
 		}

@@ -102,7 +102,7 @@ public class Assets {
 	public static boolean mainDrawVisFullscreen 	= false; 
 	public static boolean mainDrawFacadeMask	  	= true; 
 	public static boolean mainDrawAuxLines			= false; 
-	public static boolean mainDrawSmooth 			= false; 
+	public static boolean mainDrawSmooth 			= true; 
 	
 	//Assets.visMaxUserInputValue, Assets.visMinRadius, Assets.visMaxRadius);
 	
