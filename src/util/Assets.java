@@ -232,12 +232,24 @@ public class Assets {
 
 		//-------------------------------------------------
 		//FIXME to be done better, now hard coded due to special letters 
+		//Riga 2014
+		/*
 		categoryNames[0] = "ATTISTIBA";//"ATTĪSTĪBA";  
 		categoryNames[1] = "TRANSPORTS";
 		categoryNames[2] = "VIDE";
 		categoryNames[3] = "DROŠIBA";//"DROŠĪBA";
 		categoryNames[4] = "KULTURA";//"KULTŪRA";  
 		categoryNames[5] = "RIGA";
+		*/
+		
+		//LINZ / MAB'14
+		categoryNames[0] = "EDUCATION";//"ATTĪSTĪBA";  
+		categoryNames[1] = "IMMIGRATION";
+		categoryNames[2] = "TECHNOLOGY";
+		categoryNames[3] = "MOBILITY";//"DROŠĪBA";
+		categoryNames[4] = "PUBLIC SPACE";//"KULTŪRA";  
+		categoryNames[5] = "MAB14";
+		
 		
 		heartStateTimer		= new Timer(1 * heartStateSeconds * 1000);
 		
